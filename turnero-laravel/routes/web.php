@@ -47,7 +47,10 @@ Route::middleware('auth')->group(function () {
         Route::resource('admin/turnos', \App\Http\Controllers\AppointmentController::class);
     });
 
-
+    Route::middleware('role:cliente')->group(function () {
+        Route::get('/cliente/turnos', [\App\Http\Controllers\AppointmentController::class, 'verDisponibles'])->name('cliente.turnos');
+        Route::post('/cliente/turnos/{id}/reservar', [\App\Http\Controllers\AppointmentController::class, 'reservar'])->name('cliente.turnos.reservar');
+    });
 });
 
 require __DIR__.'/auth.php';
