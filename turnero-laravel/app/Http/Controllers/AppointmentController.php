@@ -64,23 +64,26 @@ class AppointmentController extends Controller
         return redirect()->route('turnos.index')->with('success', 'Turno eliminado.');
     }
 
-    public function verDisponibles()
+    public function verDisponibles($adminId = null)
     {
-        $turnos = Appointment::where('estado', 'disponible')
-            ->where(function ($query) {
-                $query->where(function ($q) {
-                    $q->where('fecha', '>', Carbon::now()->toDateString())
-                    ->orWhere(function ($q2) {
-                        $q2->where('fecha', Carbon::now()->toDateString())
-                            ->where('hora', '>', Carbon::now()->format('H:i:s'));
-                    });
+        $query = Appointment::where('estado', 'disponible')
+            ->where(function ($q) {
+                $q->where('fecha', '>', now()->toDateString())
+                ->orWhere(function ($q2) {
+                    $q2->where('fecha', now()->toDateString())
+                        ->where('hora', '>', now()->format('H:i:s'));
                 });
-            })
-            ->orderBy('fecha')
-            ->orderBy('hora')
-            ->get();
+            });
 
-        return view('cliente.turnos.index', compact('turnos'));
+        if ($adminId) {
+            $query->where('admin_id', $adminId);
+        }
+
+        $turnos = $query->orderBy('fecha')->orderBy('hora')->get();
+        $admins = \App\Models\User::where('role', 'admin')->get();
+        $adminSeleccionado = $adminId ? $admins->firstWhere('id', $adminId) : null;
+
+        return view('cliente.turnos.index', compact('turnos', 'admins', 'adminSeleccionado'));
     }
 
     public function reservar($id)

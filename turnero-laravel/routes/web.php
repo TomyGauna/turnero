@@ -51,6 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:cliente')->group(function () {
         Route::get('/cliente/turnos', [\App\Http\Controllers\AppointmentController::class, 'verDisponibles'])->name('cliente.turnos');
         Route::post('/cliente/turnos/{id}/reservar', [\App\Http\Controllers\AppointmentController::class, 'reservar'])->name('cliente.turnos.reservar');
+        Route::get('/cliente/turnos/{admin?}', [\App\Http\Controllers\AppointmentController::class, 'verDisponibles'])->name('cliente.turnos');
         Route::get('/cliente/mis-turnos', [\App\Http\Controllers\AppointmentController::class, 'misTurnos'])->name('cliente.mis_turnos');
         Route::post('/cliente/mis-turnos/{id}/cancelar', [\App\Http\Controllers\AppointmentController::class, 'cancelar'])->name('cliente.turnos.cancelar');
         Route::get('/cliente/admins', [\App\Http\Controllers\AppointmentController::class, 'elegirAdmin'])->name('cliente.elegir_admin');

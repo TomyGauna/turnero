@@ -4,22 +4,31 @@
     <div class="container">
         <h1>Turnos Disponibles</h1>
 
-        @if(session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
+        <form method="GET" action="{{ route('cliente.turnos') }}" class="mb-4">
+            <label for="admin_id">Filtrar por profesional:</label>
+            <select name="admin" id="admin_id" onchange="this.form.submit()" class="form-control w-auto d-inline-block">
+                <option value="">Todos</option>
+                @foreach($admins as $admin)
+                    <option value="{{ $admin->id }}" {{ request('admin') == $admin->id ? 'selected' : '' }}>
+                        {{ $admin->name }}
+                    </option>
+                @endforeach
+            </select>
+        </form>
 
-        @if(session('error'))
-            <div class="alert alert-danger">{{ session('error') }}</div>
+        @if($adminSeleccionado)
+            <p class="text-muted">Viendo turnos con <strong>{{ $adminSeleccionado->name }}</strong></p>
         @endif
 
         @if($turnos->isEmpty())
-            <p>No hay turnos disponibles por ahora.</p>
+            <p>No hay turnos disponibles.</p>
         @else
             <table class="table">
                 <thead>
                     <tr>
                         <th>Fecha</th>
                         <th>Hora</th>
+                        <th>Profesional</th>
                         <th>Acción</th>
                     </tr>
                 </thead>
@@ -28,10 +37,11 @@
                         <tr>
                             <td>{{ $turno->fecha }}</td>
                             <td>{{ $turno->hora }}</td>
+                            <td>{{ $turno->admin->name }}</td>
                             <td>
                                 <form action="{{ route('cliente.turnos.reservar', $turno->id) }}" method="POST">
                                     @csrf
-                                    <button class="btn btn-success">Reservar</button>
+                                    <button class="btn btn-success btn-sm">Reservar</button>
                                 </form>
                             </td>
                         </tr>
