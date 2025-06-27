@@ -7,5 +7,8 @@
         <a href="{{ route('cliente.turnos') }}" class="btn btn-primary mt-3">
             Ver turnos disponibles
         </a>
+        <a href="{{ route('cliente.mis_turnos') }}" class="btn btn-outline-primary mt-2">
+            Ver mis turnos reservados
+        </a>
     </div>
 @endsection

@@ -47,4 +47,8 @@ class User extends Authenticatable
         return $this->hasMany(App\Models\Appointment::class);
     }
 
+    public function turnosPropios()
+    {
+        return $this->hasMany(App\Models\Appointment::class, 'admin_id');
+    }
 }

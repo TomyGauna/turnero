@@ -26,7 +26,15 @@
                         <td>{{ $turno->fecha }}</td>
                         <td>{{ $turno->hora }}</td>
                         <td>{{ $turno->estado }}</td>
-                        <td>{{ $turno->user?->name ?? '-' }}</td>
+                        <td>
+                            @if($turno->user)
+                                <a href="{{ route('admin.ver_cliente', $turno->user->id) }}">
+                                    {{ $turno->user->name }}
+                                </a>
+                            @else
+                                -
+                            @endif
+                        </td>
                         <td>
                             <a href="{{ route('turnos.edit', $turno->id) }}" class="btn btn-sm btn-warning">Editar</a>
                             <form action="{{ route('turnos.destroy', $turno->id) }}" method="POST" class="d-inline">
